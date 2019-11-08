@@ -19,7 +19,7 @@
 
         static async Task MainAsync()
         {
-            const int numberOfMessages = 10;
+            //const int numberOfMessages = 10;
             topicClient = new TopicClient(ServiceBusConnectionString, TopicName);
 
             Console.WriteLine("======================================================");
@@ -27,21 +27,21 @@
             Console.WriteLine("======================================================");
 
             // Send messages.
-            await SendMessagesAsync(numberOfMessages);
+            Console.WriteLine("Insert message");
+            var m = Console.ReadLine();
+            await SendMessagesAsync(m);
 
             Console.ReadKey();
 
             await topicClient.CloseAsync();
         }
 
-        static async Task SendMessagesAsync(int numberOfMessagesToSend)
+        static async Task SendMessagesAsync(string messageToSend)
         {
             try
             {
-                for (var i = 0; i < numberOfMessagesToSend; i++)
-                {
                     // Create a new message to send to the topic
-                    string messageBody = $"Message {i}";
+                    string messageBody = messageToSend;
                     var message = new Message(Encoding.UTF8.GetBytes(messageBody));
 
                     // Write the body of the message to the console
@@ -49,7 +49,6 @@
 
                     // Send the message to the topic
                     await topicClient.SendAsync(message);
-                }
             }
             catch (Exception exception)
             {
